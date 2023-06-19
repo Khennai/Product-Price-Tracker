@@ -1,0 +1,48 @@
+import requests
+  
+product_url = "https://www.flipkart.com/python-tricks/p/itmezty4gczs6f9s?pid=9781775093305&lid=LSTBOK9781775093305QZP4LP&marketplace=FLIPKART&fm=productRecommendation%2Fsimilar&iid=R%3As%3Bp%3A9780984221233%3Bpt%3App%3Buid%3Af07c882a-0e8b-11ee-a3b8-d58d4e447594%3B.9781775093305&ppt=pp&ppn=pp&ssid=mm6oyod8ds0000001687170392345&otracker=pp_reco_Similar%2BProducts_4_33.productCard.PMU_HORIZONTAL_Python%2BTricks_9781775093305_productRecommendation%2Fsimilar_3&otracker1=pp_reco_PINNED_productRecommendation%2Fsimilar_Similar%2BProducts_GRID_productCard_cc_4_NA_view-all&cid=9781775093305"
+  
+# fetch webpage
+r = requests.get(product_url)
+  
+# get text of webpage
+content = r.text
+# class="_30jeq3 _16Jk6d"
+print(f"Count of class _30jeq3 is {content.count('_30jeq3')}")
+print(f"Count of class _16Jk6d is {content.count('_16Jk6d')}")
+
+import requests
+from bs4 import BeautifulSoup
+import time
+  
+product_url = "https://www.flipkart.com/python-tricks/p/itmezty4gczs6f9s?pid=9781775093305&lid=LSTBOK9781775093305QZP4LP&marketplace=FLIPKART&fm=productRecommendation%2Fsimilar&iid=R%3As%3Bp%3A9780984221233%3Bpt%3App%3Buid%3Af07c882a-0e8b-11ee-a3b8-d58d4e447594%3B.9781775093305&ppt=pp&ppn=pp&ssid=mm6oyod8ds0000001687170392345&otracker=pp_reco_Similar%2BProducts_4_33.productCard.PMU_HORIZONTAL_Python%2BTricks_9781775093305_productRecommendation%2Fsimilar_3&otracker1=pp_reco_PINNED_productRecommendation%2Fsimilar_Similar%2BProducts_GRID_productCard_cc_4_NA_view-all&cid=9781775093305"
+
+target_price = 129
+  
+  
+def check_price():
+    # fetch webpage
+    r = requests.get(product_url)
+    # parse the html
+    soup = BeautifulSoup(r.content, 'html5lib')
+    # extract price using class '_16Jk6d'
+    price = soup.find('div', attrs={"class": "_16Jk6d"}).text
+    # remove commas from price
+    price_without_comma = price_without_Rs.replace(",", "")
+    # convert price from string to int
+    int_price = int(price_without_comma)
+    return int_price
+  
+  
+cur_price = check_price()
+print(f"Current price is {cur_price}")
+print("Will inform you, once price of product hits out target price")
+while True:
+    # get current price
+    cur_price = check_price()
+    if cur_price <= target_price:
+        print(f"Its time to buy product, its current price is {cur_price}")
+        break
+    # wait for 1 minute to check again
+    time.sleep(60)
+    
